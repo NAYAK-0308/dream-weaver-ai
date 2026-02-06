@@ -6,6 +6,65 @@
 
 @layer base {
   :root {
+    --background: 40 25% 97%;
+    --foreground: 228 25% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 228 25% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 228 25% 12%;
+
+    --primary: 24 92% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 230 20% 93%;
+    --secondary-foreground: 228 20% 20%;
+
+    --muted: 230 15% 91%;
+    --muted-foreground: 228 10% 42%;
+
+    --accent: 172 55% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 230 18% 87%;
+    --input: 230 18% 90%;
+    --ring: 24 92% 50%;
+
+    --radius: 0.75rem;
+
+    /* Orb colors — light theme: soft pastels */
+    --orb-1-color: 24 90% 70%;
+    --orb-2-color: 200 70% 75%;
+    --orb-3-color: 320 60% 78%;
+    --orb-opacity: 0.18;
+
+    /* Cursor glow */
+    --cursor-glow-1: 24 92% 50% / 0.06;
+    --cursor-glow-2: 200 70% 60% / 0.04;
+
+    /* Gradient text */
+    --gradient-from: 24 92% 50%;
+    --gradient-to: 172 55% 36%;
+
+    /* Shimmer */
+    --shimmer-base: 230 20% 93%;
+    --shimmer-highlight: 230 15% 97%;
+
+    --sidebar-background: 40 25% 97%;
+    --sidebar-foreground: 228 25% 12%;
+    --sidebar-primary: 24 92% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 230 20% 93%;
+    --sidebar-accent-foreground: 228 25% 12%;
+    --sidebar-border: 230 18% 87%;
+    --sidebar-ring: 24 92% 50%;
+  }
+
+  .dark {
     --background: 228 20% 6%;
     --foreground: 210 20% 93%;
 
@@ -34,7 +93,23 @@
     --input: 228 15% 11%;
     --ring: 24 95% 55%;
 
-    --radius: 0.75rem;
+    /* Orb colors — dark theme: vivid neon */
+    --orb-1-color: 24 95% 55%;
+    --orb-2-color: 172 60% 42%;
+    --orb-3-color: 340 75% 55%;
+    --orb-opacity: 0.12;
+
+    /* Cursor glow */
+    --cursor-glow-1: 24 95% 55% / 0.07;
+    --cursor-glow-2: 172 60% 42% / 0.04;
+
+    /* Gradient text */
+    --gradient-from: 24 95% 55%;
+    --gradient-to: 172 60% 42%;
+
+    /* Shimmer */
+    --shimmer-base: 228 15% 13%;
+    --shimmer-highlight: 228 12% 18%;
 
     --sidebar-background: 228 20% 6%;
     --sidebar-foreground: 210 20% 93%;
@@ -55,22 +130,24 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Space Grotesk', system-ui, sans-serif;
+    transition: background-color 0.4s ease, color 0.3s ease;
   }
 }
 
-/* Background gradient orbs */
+/* Background gradient orbs — theme-aware via CSS vars */
 .orb {
   position: absolute;
   border-radius: 50%;
   filter: blur(100px);
-  opacity: 0.12;
+  opacity: var(--orb-opacity);
   will-change: transform;
+  transition: background 0.6s ease, opacity 0.6s ease;
 }
 
 .orb-1 {
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, hsl(24 95% 55%) 0%, transparent 70%);
+  background: radial-gradient(circle, hsl(var(--orb-1-color)) 0%, transparent 70%);
   top: -200px;
   right: -100px;
   animation: float-1 20s ease-in-out infinite;
@@ -79,7 +156,7 @@
 .orb-2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, hsl(172 60% 42%) 0%, transparent 70%);
+  background: radial-gradient(circle, hsl(var(--orb-2-color)) 0%, transparent 70%);
   bottom: -150px;
   left: -100px;
   animation: float-2 25s ease-in-out infinite;
@@ -88,7 +165,7 @@
 .orb-3 {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, hsl(340 75% 55%) 0%, transparent 70%);
+  background: radial-gradient(circle, hsl(var(--orb-3-color)) 0%, transparent 70%);
   top: 40%;
   left: 40%;
   animation: float-3 18s ease-in-out infinite;
@@ -113,7 +190,7 @@
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(135deg, hsl(24 95% 55%), hsl(172 60% 42%), hsl(24 95% 55%));
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)));
   opacity: 0;
   transition: opacity 0.4s ease;
   z-index: -1;
@@ -124,7 +201,7 @@
   opacity: 0.5;
 }
 
-/* Shimmer loading effect */
+/* Shimmer loading effect — theme-aware */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -133,9 +210,9 @@
 .shimmer {
   background: linear-gradient(
     90deg,
-    hsl(228 15% 13%) 25%,
-    hsl(228 12% 18%) 50%,
-    hsl(228 15% 13%) 75%
+    hsl(var(--shimmer-base)) 25%,
+    hsl(var(--shimmer-highlight)) 50%,
+    hsl(var(--shimmer-base)) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 2s ease-in-out infinite;
@@ -143,8 +220,8 @@
 
 /* Timeline pulse dot */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(24 95% 55% / 0.4); }
-  50% { box-shadow: 0 0 0 8px hsl(24 95% 55% / 0); }
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
+  50% { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
 }
 
 .pulse-dot {
@@ -172,9 +249,9 @@
   66% { transform: translate(-50px, 30px) scale(0.94); }
 }
 
-/* Gradient text helper */
+/* Gradient text helper — theme-aware */
 .text-gradient {
-  background: linear-gradient(135deg, hsl(24 95% 55%), hsl(172 60% 42%));
+  background: linear-gradient(135deg, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

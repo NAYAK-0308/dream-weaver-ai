@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Wand2, Download } from "lucide-react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import CursorGlow from "@/components/CursorGlow";
+import ThemeToggle from "@/components/ThemeToggle";
 import PromptInput from "@/components/PromptInput";
 import GenerationTimeline from "@/components/GenerationTimeline";
 import sampleImage from "@/assets/sample-generated.jpg";
@@ -55,6 +56,11 @@ const Index = () => {
     <div className="min-h-screen relative flex flex-col">
       <AnimatedBackground />
       <CursorGlow />
+
+      {/* Theme toggle — top right */}
+      <div className="fixed top-5 right-5 z-50">
+        <ThemeToggle />
+      </div>
 
       <main className="flex-1 flex flex-col items-center px-4 sm:px-6 pt-16 sm:pt-24 pb-12">
         {/* Hero Section */}

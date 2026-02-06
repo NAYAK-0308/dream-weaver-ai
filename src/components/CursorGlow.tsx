@@ -33,7 +33,7 @@ const CursorGlow = () => {
       className="pointer-events-none fixed inset-0 z-30 opacity-0 transition-opacity duration-300"
       style={{
         background:
-          "radial-gradient(600px circle at var(--glow-x, 50%) var(--glow-y, 50%), hsl(24 95% 55% / 0.07), hsl(172 60% 42% / 0.04) 40%, transparent 70%)",
+          "radial-gradient(600px circle at var(--glow-x, 50%) var(--glow-y, 50%), hsl(var(--cursor-glow-1)), hsl(var(--cursor-glow-2)) 40%, transparent 70%)",
       }}
     />
   );
