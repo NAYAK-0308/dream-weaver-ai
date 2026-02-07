@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Wand2, Download } from "lucide-react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import CursorGlow from "@/components/CursorGlow";
+import InteractiveParticles from "@/components/InteractiveParticles";
 import ThemeToggle from "@/components/ThemeToggle";
 import PromptInput from "@/components/PromptInput";
 import GenerationTimeline from "@/components/GenerationTimeline";
@@ -55,6 +56,7 @@ const Index = () => {
   return (
     <div className="min-h-screen relative flex flex-col">
       <AnimatedBackground />
+      <InteractiveParticles />
       <CursorGlow />
 
       {/* Theme toggle — top right */}
