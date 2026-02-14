@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block body %}
+<!-- Animated Background -->
+<div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute inset-0 bg-bg dark:bg-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="noise-overlay"></div>
+</div>
+
+<!-- Theme Toggle -->
+<div class="fixed top-5 right-5 z-50">
+    <button onclick="toggleTheme()" class="theme-btn w-10 h-10 rounded-full bg-secondary/80 dark:bg-secondary/80 border border-border/50 flex items-center justify-center text-lg shadow-lg">
+        <span id="themeIcon">☀️</span>
+    </button>
+</div>
+
+<main class="flex-1 flex flex-col items-center px-4 sm:px-6 pt-16 sm:pt-24 pb-12 relative z-10">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-10 sm:mb-12">
+        <div class="fade-in inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-1.5 mb-6">
+            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 4-1 2-2 1 2 1 1 2 1-2 2-1-2-1-1-2Z"/><path d="m8 9-1.5 3L3 13.5l3.5 1.5L8 18l1.5-3L13 13.5 9.5 12 8 9Z"/></svg>
+            <span class="text-sm text-primary font-medium">Powered by AI</span>
+        </div>
+
+        <h1 class="fade-in fade-in-d1 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-5">
+            Text to Image
+            <span class="block text-gradient mt-1">AI Generation</span>
+        </h1>
+
+        <p class="fade-in fade-in-d2 text-muted text-base sm:text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+            Transform your words into stunning visuals with the power of artificial intelligence
+        </p>
+    </div>
+
+    <!-- Prompt Input -->
+    <div class="fade-in fade-in-d3 w-full max-w-2xl mx-auto mb-12">
+        <form method="POST" action="/">
+            <div class="glow-border rounded-2xl">
+                <div class="flex items-center gap-2 bg-card/80 dark:bg-card/80 backdrop-blur-xl rounded-2xl border border-border/50 p-2 pl-5 shadow-lg">
+                    <svg class="w-5 h-5 text-muted shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 4-1 2-2 1 2 1 1 2 1-2 2-1-2-1-1-2Z"/><path d="m8 9-1.5 3L3 13.5l3.5 1.5L8 18l1.5-3L13 13.5 9.5 12 8 9Z"/></svg>
+                    <input
+                        type="text"
+                        name="prompt"
+                        value="{{ prompt or '' }}"
+                        placeholder="Describe the image you want to create..."
+                        class="flex-1 bg-transparent text-fg dark:text-fg placeholder:text-muted outline-none text-base md:text-lg py-2"
+                        required
+                    >
+                    <button type="submit" class="flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-xl font-semibold text-sm transition-all hover:shadow-lg hover:opacity-90">
+                        Generate
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Example prompts -->
+        <div class="flex flex-wrap justify-center gap-2 mt-5">
+            {% for example in ["A cyberpunk city at sunset", "Astronaut floating in a nebula", "Magical forest with bioluminescence", "Steampunk clockwork dragon"] %}
+            <button onclick="document.querySelector('input[name=prompt]').value='{{ example }}'; document.querySelector('form').submit();"
+                    class="chip text-xs bg-secondary/60 hover:bg-secondary text-muted hover:text-fg border border-border/30 hover:border-border/60 rounded-full px-4 py-1.5">
+                {{ example }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Error -->
+    {% if error %}
+    <div class="w-full max-w-4xl mx-auto mb-6">
+        <div class="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 text-center">
+            <p class="text-red-400 text-sm">{{ error }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Result Panel -->
+    {% if image_url %}
+    <div class="w-full max-w-4xl mx-auto fade-in">
+        <div class="bg-card/60 backdrop-blur-2xl rounded-3xl border border-border/50 p-5 sm:p-8 shadow-2xl">
+            <div class="flex flex-col md:flex-row gap-6 sm:gap-8">
+
+                <!-- Timeline (static complete state) -->
+                <div class="md:w-2/5 lg:w-1/3">
+                    <h3 class="text-xs font-semibold text-muted mb-5 uppercase tracking-[0.2em]">Generation Progress</h3>
+                    <div class="space-y-3">
+                        {% for step in [
+                            {"emoji": "🎨", "text": "Analyzing your creative vision..."},
+                            {"emoji": "🧠", "text": "Warming up the neural networks..."},
+                            {"emoji": "🖌️", "text": "Painting pixels with AI magic..."},
+                            {"emoji": "☕", "text": "Grab a coffee, good things take time..."},
+                            {"emoji": "✨", "text": "Adding the finishing touches..."},
+                            {"emoji": "🔍", "text": "Final quality check..."},
+                            {"emoji": "🎉", "text": "Your masterpiece is ready!"}
+                        ] %}
+                        <div class="flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs shrink-0 mt-0.5 bg-primary/20 text-primary">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+                            </div>
+                            <span class="text-sm leading-relaxed text-muted">{{ step.emoji }} {{ step.text }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Image -->
+                <div class="md:w-3/5 lg:w-2/3">
+                    <div class="aspect-square rounded-2xl overflow-hidden bg-secondary/50 border border-border/30">
+                        <img src="{{ image_url }}" alt="{{ prompt or 'Generated image' }}" class="w-full h-full object-cover img-reveal">
+                    </div>
+                    <div class="mt-4 flex items-center justify-between gap-4">
+                        <p class="text-sm text-muted italic truncate">&ldquo;{{ prompt }}&rdquo;</p>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <a href="{{ image_url }}" download class="text-sm text-muted hover:text-fg transition-colors flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5 5 5 5-5m-5 5V3"/></svg>
+                                Save
+                            </a>
+                            <a href="/" class="text-sm text-primary hover:opacity-80 font-medium transition-colors">Generate another →</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</main>
+{% endblock %}
